@@ -1,7 +1,34 @@
+import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import RecipeCard from "../components/RecipeCard";
 
+const APP_ID = import.meta.env.VITE_APP_ID;
+const APP_KEY = import.meta.env.VITE_APP_KEY;
+
 export default function HomePage() {
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRecipes = async (searchQuery) => {
+    setLoading(true);
+    setRecipes([]);
+    try {
+      const res = await fetch(
+        `https://api.edamam.com/api/recipes/v2/?app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchQuery}&type=public`
+      );
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecipes("chicken");
+  }, []);
+
   return (
     <div className="p-10 flex-1">
       <div className="max-w-screen-lg mx-auto">
