@@ -48,10 +48,15 @@ export default function RecipeCard({ recipe, bg, badge }) {
         target="blank"
         className="relative h-32"
       >
+        <div className="skeleton absolute inset-0" />
         <img
           src={recipe.image}
           alt="recipe image"
-          className="rounded-md w-full h-full object-cover cursor-pointer"
+          className="rounded-md w-full h-full object-cover cursor-pointer opacity-0 transition-opacity duration-500"
+          onLoad={(e) => {
+            e.currentTarget.style.opacity = 1;
+            e.currentTarget.previousElementSibling.style.display = "none";
+          }}
         />
         <div className="absolute bottom-2 left-2 bg-white rounded-full p-1 cursor-pointer flex items-center gap-1 text-sm ">
           <Soup size={16} /> {recipe.yield} Servings
@@ -79,9 +84,9 @@ export default function RecipeCard({ recipe, bg, badge }) {
       </a>
 
       <div className="flex mt-1">
-        <p className="font-bold tracking-wide">{recipe.label}</p>
+        <p className="font-medium tracking-wide">{recipe.label}</p>
       </div>
-      <p className="my-2">
+      <p className="my-2 text-sm">
         {recipe.cuisineType[0][0].toUpperCase() +
           recipe.cuisineType[0].slice(1).toLowerCase()}{" "}
         Kitchen
