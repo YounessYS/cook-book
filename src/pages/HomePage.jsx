@@ -1,4 +1,4 @@
-import { Heart, HeartPulse, Search, Soup } from "lucide-react";
+import { Search } from "lucide-react";
 import RecipeCard from "../components/RecipeCard";
 
 export default function HomePage() {
@@ -15,7 +15,7 @@ export default function HomePage() {
             />
           </label>
         </form>
-        <h1 className="font-bold text-3xl md:text-5xl mt-4">
+        <h1 className="font-bold text-3xl md:text-5xl mt-4 text-gray-200">
           Recommended Recipes
         </h1>
         <p className="font-semibold ml-1 my-2 text-sm tracking-tight">
