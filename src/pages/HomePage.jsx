@@ -27,7 +27,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchRecipes("neapolitan pizza");
+    fetchRecipes("neapolitan pasta");
   }, []);
 
   const handleSearchRecipe = (e) => {
