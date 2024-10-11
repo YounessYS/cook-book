@@ -1,8 +1,35 @@
 import RecipeCard from "../components/RecipeCard.jsx";
 import { getRandomColour } from "../lib/utils";
+import { useState, useEffect } from "react";
 
 export default function FavouritesPage() {
-  const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+  const [favourites, setFavourites] = useState([]);
+
+  useEffect(() => {
+    const storedFavourites =
+      JSON.parse(localStorage.getItem("favourites")) || [];
+    setFavourites(storedFavourites);
+
+    const handleStorageChange = () => {
+      const updatedFavourites =
+        JSON.parse(localStorage.getItem("favourites")) || [];
+      setFavourites(updatedFavourites);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const removeFavourite = (recipeLabel) => {
+    const updatedFavourites = favourites.filter(
+      (fav) => fav.label !== recipeLabel
+    );
+    setFavourites(updatedFavourites);
+    localStorage.setItem("favourites", JSON.stringify(updatedFavourites));
+  };
 
   return (
     <div className="flex-1 p-10 min-h-screen">
@@ -16,7 +43,7 @@ export default function FavouritesPage() {
             <img
               src="/no-favs.png"
               alt="no favourites"
-              className="w-full h-full object-fill rounded opacity-70"
+              className="w-full h-full object-fill rounded opacity-70 pointer-events-none select-none"
             />
           </div>
         )}
@@ -27,6 +54,7 @@ export default function FavouritesPage() {
               key={recipe.label}
               recipe={recipe}
               {...getRandomColour()}
+              removeFavourite={removeFavourite}
             />
           ))}
         </div>

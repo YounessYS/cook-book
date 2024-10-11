@@ -5,7 +5,7 @@ const getTwoFromArray = (arr) => {
   return [arr[0], arr[1]];
 };
 
-export default function RecipeCard({ recipe, bg, badge }) {
+export default function RecipeCard({ recipe, bg, badge, removeFavourite }) {
   const healthLabels = getTwoFromArray(recipe.healthLabels);
   const [isFavourite, setIsFavourite] = useState(false);
 
@@ -18,7 +18,6 @@ export default function RecipeCard({ recipe, bg, badge }) {
     setIsFavourite(isRecipeAlreadyFavourite);
   }, [recipe.label]);
 
-  // Function to add or remove the recipe from favourites
   const addRecipeToFavourites = () => {
     let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
     const isRecipeAlreadyFavourite = favourites.some(
@@ -29,13 +28,12 @@ export default function RecipeCard({ recipe, bg, badge }) {
       // Remove the recipe from favourites
       favourites = favourites.filter((fav) => fav.label !== recipe.label);
       setIsFavourite(false);
+      if (removeFavourite) removeFavourite(recipe.label);
     } else {
-      // Add the recipe to favourites
       favourites.push(recipe);
       setIsFavourite(true);
     }
 
-    // Update localStorage
     localStorage.setItem("favourites", JSON.stringify(favourites));
   };
 
