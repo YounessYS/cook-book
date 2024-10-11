@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import RecipeCard from "../components/RecipeCard";
+import { getRandomColour } from "../lib/utils";
 
 const APP_ID = import.meta.env.VITE_APP_ID;
 const APP_KEY = import.meta.env.VITE_APP_KEY;
@@ -17,7 +18,7 @@ export default function HomePage() {
         `https://api.edamam.com/api/recipes/v2/?app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchQuery}&type=public`
       );
       const data = await res.json();
-      console.log(data);
+      setRecipes(data.hits);
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -26,7 +27,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchRecipes("chicken");
+    fetchRecipes("neapolitan pizza");
   }, []);
 
   return (
@@ -50,13 +51,22 @@ export default function HomePage() {
         </p>
 
         <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
-          <RecipeCard />
+          {!loading &&
+            recipes.map(({ recipe }, index) => (
+              <RecipeCard key={index} recipe={recipe} {...getRandomColour()} />
+            ))}
+
+          {loading &&
+            [...Array(9)].map((_, index) => (
+              <div key={index} className="flex flex-col gap-4 w-full">
+                <div className="skeleton h-32 w-full"></div>
+                <div className="flex justify-between">
+                  <div className="skeleton h-4 w-28"></div>
+                  <div className="skeleton h-4 w-24"></div>
+                </div>
+                <div className="skeleton h-4 w-1/2"></div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
